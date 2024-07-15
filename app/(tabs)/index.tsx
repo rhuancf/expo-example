@@ -1,4 +1,4 @@
-import { ScrollView, StyleSheet } from "react-native";
+import { FlatList, StyleSheet } from "react-native";
 
 import EditScreenInfo from "@/components/EditScreenInfo";
 import { Text, View } from "@/components/Themed";
@@ -10,11 +10,11 @@ export default function TabOneScreen() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Tab One</Text>
-      <ScrollView>
-        {MovieList.map((movie: Movie) => (
-          <MovieCard key={movie.id} movie={movie} />
-        ))}
-      </ScrollView>
+      <FlatList
+        keyExtractor={(item) => item.id.toString()}
+        data={MovieList}
+        renderItem={({item}) => <MovieCard movie={item} />}
+      ></FlatList>
       <View
         style={styles.separator}
         lightColor="#eee"
