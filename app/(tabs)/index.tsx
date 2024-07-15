@@ -1,19 +1,32 @@
-import { FlatList, StyleSheet } from "react-native";
+import { FlatList, StyleSheet, TextInput } from "react-native";
 
-import EditScreenInfo from "@/components/EditScreenInfo";
-import { Text, View } from "@/components/Themed";
-import { MovieList } from "@/data/MovieList";
 import MovieCard from "@/components/MovieCard";
-import { Movie } from "@/types/Movie";
+import { View } from "@/components/Themed";
+import { MovieList } from "@/data/MovieList";
+import { useState } from "react";
 
-export default function TabOneScreen() {
+export default function MovieListScreen() {
+  const [searchText, setSearchText] = useState<string>("");
+
+  const filteredMovielist = MovieList.filter((movie) => {
+    return movie.name.toLowerCase().includes(searchText.toLowerCase());
+  })
+
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Tab One</Text>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchInput}
+          placeholder="Filter by name..."
+          placeholderTextColor="#888"
+          value={searchText}
+          onChangeText={setSearchText}
+        />
+      </View>
       <FlatList
         keyExtractor={(item) => item.id.toString()}
-        data={MovieList}
-        renderItem={({item}) => <MovieCard movie={item} />}
+        data={filteredMovielist}
+        renderItem={({ item }) => <MovieCard movie={item} />}
       ></FlatList>
       <View
         style={styles.separator}
@@ -38,5 +51,25 @@ const styles = StyleSheet.create({
     marginVertical: 30,
     height: 1,
     width: "80%",
+  },
+  searchContainer: {
+    padding: 20,
+    width: "100%",
+  },
+  searchInput: {
+    width: "100%",
+    maxWidth: 400,
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 25,
+    borderWidth: 2,
+    borderColor: "#ddd",
+    fontSize: 16,
+    color: "#a5a4a4",
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 2,
+    elevation: 5,
   },
 });
