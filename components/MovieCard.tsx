@@ -1,15 +1,23 @@
 import { Movie } from "@/types/Movie";
+import { Link } from "expo-router";
 import React from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { StyleSheet, Text, View } from "react-native";
 
-const MovieCard = ({movie}: {movie: Movie}) => {
+const MovieCard = ({ movie }: { movie: Movie }) => {
   return (
     <View style={styles.card} key={movie.id}>
-      <Text style={styles.title}>{movie.name}</Text>
-      <Text style={styles.details}>Year: {movie.yearOfPublication}</Text>
-      <Text style={styles.details}>
-        In Theaters: {movie.isInTheaters ? "Yes" : "No"}
-      </Text>
+      <Link href={{
+          pathname: "/movie",
+          params: { id: movie.id },
+        }}>
+        <View>
+          <Text style={styles.title}>{movie.name}</Text>
+          <Text style={styles.details}>Year: {movie.yearOfPublication}</Text>
+          <Text style={styles.details}>
+            In Theaters: {movie.isInTheaters ? "Yes" : "No"}
+          </Text>
+        </View>
+      </Link>
     </View>
   );
 };
