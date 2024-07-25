@@ -3,6 +3,7 @@ export interface Movie {
   name: string;
   yearOfPublication: number;
   isInTheaters: boolean;
+  posterImage?: string;
 }
 
 
