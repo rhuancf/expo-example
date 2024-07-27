@@ -1,16 +1,32 @@
-import { FlatList, StyleSheet, TextInput } from "react-native";
-
 import MovieCard from "@/components/MovieCard";
 import { View } from "@/components/Themed";
 import { MovieList } from "@/data/MovieList";
-import { useState } from "react";
+import { useURL } from "expo-linking";
+import { router } from "expo-router";
+import { useEffect, useState } from "react";
+import { FlatList, StyleSheet, Text, TextInput } from "react-native";
 
 export default function MovieListScreen() {
   const [searchText, setSearchText] = useState<string>("");
+  const url = useURL();
 
   const filteredMovielist = MovieList.filter((movie) => {
     return movie.name.toLowerCase().includes(searchText.toLowerCase());
-  })
+  });
+
+  useEffect(() => {
+    if (url) {
+      const match = url.match(/\/movie\/(\d+)/); // Regex para extrair o id do link
+      if (match) {
+        const movieId = match[1];
+        router.push(`/movie/?id=${movieId}`);
+      }
+
+      if (url.match(/\/modal\b/)) {
+        router.push("/modal/");
+      }
+    }
+  }, [url]);
 
   return (
     <View style={styles.container}>
@@ -23,11 +39,12 @@ export default function MovieListScreen() {
           onChangeText={setSearchText}
         />
       </View>
+      {/* <Text>Current URL: {url}</Text> */}
       <FlatList
         keyExtractor={(item) => item.id.toString()}
         data={filteredMovielist}
         renderItem={({ item }) => <MovieCard movie={item} />}
-      ></FlatList>
+      />
       <View
         style={styles.separator}
         lightColor="#eee"

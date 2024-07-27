@@ -2,10 +2,13 @@ import { ImageBackground, StyleSheet } from "react-native";
 import { Text, View } from "@/components/Themed";
 import { useLocalSearchParams } from "expo-router";
 import { MovieList } from "@/data/MovieList";
+import { createURL } from 'expo-linking';
+
 
 export default function MovieScreen() {
   const { id } = useLocalSearchParams();
   const { posterImage, name }  = MovieList.find((movie) => movie.id.toString() === id) || {};
+  const url = createURL(`movie/${id}`);
 
   if (!posterImage) {
     return (
@@ -13,6 +16,7 @@ export default function MovieScreen() {
         <Text style={styles.title}>Oops...</Text>
         <View style={styles.separator} lightColor="#eee" darkColor="rgba(255,255,255,0.1)" />
         <Text style={styles.text}>Sorry, the poster for movie "{name}" was not found</Text>
+        <Text>Deep Link: {url}</Text>
       </View>
     );
   }
@@ -23,7 +27,7 @@ export default function MovieScreen() {
         source={{ uri: posterImage }}
         style={styles.image}
         imageStyle={{ resizeMode: "contain" }}
-      ></ImageBackground>
+        ></ImageBackground>
     </View>
   );
 }
